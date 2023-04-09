@@ -5,7 +5,7 @@
     {% if auction.state_bid and user.is_authenticated and user != auction.bid.user %}
     <form class="watchlist" method="post">
         {% csrf_token %}
-        <input type="submit" value="{{add_remove}}" name="watchlist" id="watchlist_button"/>
+        <input class="notranslate" type="submit" value="{{add_remove}}" name="watchlist" id="watchlist_button"/>
     </form>
     <script>
         watchlist_button = document.getElementById("watchlist_button");
