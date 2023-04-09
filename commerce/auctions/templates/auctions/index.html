@@ -55,6 +55,6 @@
         </div>
     </div>
     {%empty%}
-    <p>There are not auctions yet, try to <a href="{% url 'create' %}">create one</a></p>
+    <p>There are not auctions yet, {% if user.is_authenticated %} try to <a href="{% url 'create' %}">create one</a> {%else%} <a href="{% url 'register' %}">register</a> to have more features available {% endif %}</p>
     {% endfor %}
 {% endblock %}
