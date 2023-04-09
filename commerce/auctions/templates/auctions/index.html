@@ -1,0 +1,60 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+    <div id="accordion" style="margin-bottom: 1rem;">
+        <div class="card">
+          <div class="card-header" id="heading" >
+            <h5 class="mb-0" >
+              <button class="btn btn-link" data-toggle="collapse" aria-expanded="false" data-target="#collapseOne"  aria-controls="collapseOne">
+                Find more about this website
+              </button>
+            </h5>
+          </div>
+      
+          <div id="collapseOne" class="collapse "  aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+              <p>Helau and welcome to Students Bid Hub where in a team we can solve our problems.
+                Here are some affordable and funny student-focused bidding ideas : 
+                <ul>
+                    <li><span style="font-weight:bold;">Meal Plan Exchange</span> (If ou have a lot of food and don't know what to do with it you can bid it), </li>
+                    <li><span style="font-weight:bold;">"Do My Laundry"</span> (or iron clothes)</li>
+                    <li><span style="font-weight:bold;">Group study sessions</span> (for specific coruses/ for exam)</li>
+                    <li><span style="font-weight:bold;">"Dorm Room Decor"</span>  (Bid on unique and quirky dorm room items e,g wall art, LEDs),</li>
+                    <li><span style="font-weight:bold;">"Lend me Your Notes"</span>  (bid on a service where another student will lend them ther notes for a specific coruse.)</li>
+                </ul>
+               </p>
+               <p><span style="color:rgb(167, 32, 32); font-weight: bold;">Important</span>, do not bid on any type of homework. If this happens, the account wil be deleted.</p>
+               <p>The currency for the site is <span style="color:rgb(167, 32, 32); font-weight: bold;">pencil</span>, feel free to specify in bid details what is your currency.</p>
+               <p>If you want to contribute with new ideas for the site you can email me on <span style="font-weight: bold;">mihaibivol.dev@gmail.com</span></p>
+               <p>The website is a solving solution for project 2 from cs50web (Harvard Course)</p>
+            </div>
+          </div>
+        </div>
+    </div>
+    <h2>Active Listings</h2>
+
+    {% for auction in auction_list%}
+    <div onclick="location.href='listings/{{auction.id}}';" style="cursor: pointer;" class="container_bid">
+        {% if auction.bid.URL%}
+        <img src="{{auction.bid.URL}}">
+        {% endif %}
+        <div class="content">
+            <h4>{{auction.bid.title}} <p>{{auction.bid.date}} GMT</p></h4>
+        <p>Price : {{auction.current_price}} LEI</p>
+        <p>Category : {{auction.bid.category}}</p>
+        </div>
+    </div>
+    {%empty%}
+    <p>There are not auctions yet, try to <a href="{% url 'create' %}">create one</a></p>
+    {% endfor %}
+{% endblock %}

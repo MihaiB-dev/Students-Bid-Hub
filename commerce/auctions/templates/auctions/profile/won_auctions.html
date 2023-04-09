@@ -1,0 +1,18 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+    <h2>Won Auctions</h2>
+    {% for auction in won_auctions%}
+    <div onclick="location.href='../listings/{{auction.id}}';" style="cursor: pointer;" class="container_bid">
+        {% if auction.bid.URL%}
+        <img src="{{auction.bid.URL}}">
+        {% endif %}
+        <div class="content">
+            <h4>{{auction.bid.title}} <p>{{auction.bid.date}} GMT</p></h4>
+        <p>Price : {{auction.current_price}} LEI</p>
+        <p>Category : {{auction.bid.category}}</p>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

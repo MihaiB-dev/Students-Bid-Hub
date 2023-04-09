@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+
+{% block body%}
+    <h2>Watchlist</h2>
+    {% for element in elements%}
+    <div onclick="location.href='listings/{{element.auction.id}}';" style="cursor: pointer;" class="container_bid">
+        {% if element.auction.bid.URL%}
+        <img src="{{element.auction.bid.URL}}">
+        {% endif %}
+        <div class="content">
+            <h4>{{element.auction.bid.title}} <p>{{element.auction.bid.date}} GMT</p></h4>
+        <p>Price : {{element.auction.current_price}} LEI</p>
+        <p>Category : {{element.auction.bid.category}}</p>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

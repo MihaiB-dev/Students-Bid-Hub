@@ -1,0 +1,105 @@
+{% extends "auctions/layout.html" %}
+
+{% block body%}
+
+    {% if auction.state_bid and user.is_authenticated and user != auction.bid.user %}
+    <form class="watchlist" method="post">
+        {% csrf_token %}
+        <input type="submit" value="{{add_remove}}" name="watchlist" id="watchlist_button"/>
+    </form>
+    <script>
+        watchlist_button = document.getElementById("watchlist_button");
+        if (watchlist_button.value == "Watchlist +")
+        {
+            watchlist_button.className= "watchlist_active";
+        }
+        else if (watchlist_button.value == "Watchlist -")
+        {
+            watchlist_button.className = "watchlist_inactive";
+        }
+    </script>
+    {% endif %}
+    <h2 style="word-wrap: break-word;">Listing:  {{auction.bid.title}}</h2>
+    <!-- button for watchlist method post-->
+    {% if auction.state_bid %}
+            <div class="container_auction">
+            {% if auction.bid.URL%}
+            <img width="200" height="200" src="{{auction.bid.URL}}">
+            {% endif %}
+
+            <p class="price">Price : {{auction.current_price}} PENCILS {% if auction.last_bidder == user %}<span class="optional_your_bid"> (Your Bid) <span>{% endif %} </p> 
+            <hr>
+
+            <p>{{auction.bid.text}}</p>
+            <hr>    
+            <!-- pricing and place a bid -->
+            <p class="nr_bids">{{auction.number_bids}} bid(s) so far. {% if user.is_authenticated and user != auction.bid.user%} <span> Place a new bid here :</span>{%endif%}</p>
+            {% if user.is_authenticated %} <!--add class for form -->
+                {%if user != auction.bid.user %}
+                    
+                    <form action = "{% url 'auction' auction.id %}" method = "post">
+                        {% csrf_token %}
+                        <input type="number" class="bid_input" min="{{ auction.current_price }}" placeholder="Minimum {{ auction.current_price }}"name="place_bid">
+                        <input type="submit"class="button-33" value="Bid">
+                        
+                    </form>
+                    <hr>
+                {% else %}
+                    <p>End the bid:</p>
+                    <form action = "{% url 'auction' auction.id%}" method = "post">
+                        {% csrf_token %}
+                        <input type="Submit" value="Close" class="button-33" name="Close_auction">
+                    </form>
+                    <hr>
+                {%endif %}
+
+            {% endif %}
+            
+            <h4>Details</h4>
+            <ul>
+                <li>Listed by: {{auction.bid.user}}</li>
+                <li>Category : {{auction.bid.category}}</li>
+                <li>Date listed : {{auction.bid.date }} GMT</li>
+            </ul>
+
+            <h4>Comments</h4>
+            <!-- form for creating a comment -->
+            {% if user.is_authenticated %}
+            
+            <div class="post_comment">
+                <p>{{user.username}}</p>
+                <form action = "{% url 'auction' auction.id%}" method = "post">
+                    {% csrf_token %}
+                    <input type="textarea" rows="1" cols="20"class="comment_input" name="new_comment" placeholder="add a comment for {{auction.bid.title}}">
+                    <input type="submit" class="button-33" value="Post">
+                </form>
+            </div>
+            
+            {% endif %}
+            {%for comment in comments%}
+            <div class="all_comments">
+                <div class="title_comments">
+                    <p>{{comment.user}}</p>
+                    <p>{{comment.date_post}}</p>
+                </div>
+                <p class="comment_text">{{comment.comment_text}}</p>
+            </div>
+                
+                {% empty %}
+                <p>Be the first who adds a comment.</p>
+            {% endfor %}
+    {% else %}
+            <p class="winner">The winner for this auction is <span style="font-weight:bold">{{ auction.last_bidder}}</span>, congratulations &#129351; &#129346;</p>
+            <p class="price">Last price was : {{auction.current_price}} </p>
+            {% if user.is_authenticated and user == auction.last_bidder %}
+            <p>Name of the owner : {{ auction.bid.user }}</p>
+            <p style="font-size:1.1rem;">You can conntact the owner of the bid on this email : <span style="font-weight:bold">{{user.email}}</span></p>
+            <p style="font-size:0.9rem; color:grey">We are not responsabile if the person who created the auction doesn't respond, thank you for understanding.</p>
+            {%endif%}
+            {% if user.is_authenticated and user == auction.bid.user %}
+            <p style="font-size:1.1rem;">The winner email is : {{ auction.last_bidder.email }}</p>
+            {% endif %}
+            <p style="margin-top:2rem; font-size:1.2rem;">The auction is now closed.</p>
+    {%endif%}
+    </div>
+{% endblock %}

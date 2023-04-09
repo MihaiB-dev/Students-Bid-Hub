@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body%}
+    <h3>Accout Details:</h3>
+    <ul>
+        {% if user.is_authenticated %}
+            <li>Email: {{user.email}}</li>
+            <li>
+                <p>Auctions created: </p>
+                <ul>
+                    <li>Check out your <a href="{% url 'active auctions' %}">active auctions </a>{% if counter_active_auctions != 0%} {{counter_active_auctions}} {%endif %} </li>
+                    <li>Check out your <a href="{% url 'non active auctions' %}">Non active auctions</a>{% if counter_non_active_auctions != 0%} {{counter_non_active_auctions}} {%endif %}</li>
+                </ul>
+                
+            </li>
+
+            <li>
+                <p>Auctions participated:</p>
+                <ul>
+                    <li>Check out your <a href="{% url 'won auctions' %}">Won auctions</a>{% if counter_won_auctions != 0%} {{counter_won_auctions}} {%endif %}</li>
+                </ul>
+            </li>
+        {% else %}
+        <p>Yoru are not logged in.</p>
+        {% endif %}
+    </ul>
+{% endblock %}
